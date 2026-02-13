@@ -33,6 +33,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifact
+          path: .
+        
+      - name: Mostrar estrutura de arquivos
+        run: ls -R
 
       - name: Mostrar conteúdo
         run: |
