@@ -24,21 +24,20 @@ jobs:
           name: build-artifact
           path: dist/
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
+deploy:
+  runs-on: ubuntu-latest
+  needs: build
 
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: build-artifact
-          path: .
-        
-      - name: Mostrar estrutura de arquivos
-        run: ls -R
+  steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: build-artifact
 
-      - name: Mostrar conteúdo
-        run: |
-          echo "Conteúdo do artefato:"
-          cat dist/build.txt
+    - name: Ver onde o arquivo foi baixado
+      run: |
+        echo "Arquivos encontrados:"
+        ls -R
+
+    - name: Mostrar conteúdo
+      run: cat build.txt
