@@ -1,26 +1,40 @@
-name: CI Pipeline
+name: CI Artifact Test
 
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout código
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Criar pasta dist
+        run: mkdir dist
+
+      - name: Criar arquivo de build fake
+        run: echo "Build version 1.0" > dist/build.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
         with:
-          node-version: 20
+          name: build-artifact
+          path: dist/
 
-      - name: Instalar dependências
-        run: npm install
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
 
-      - name: Rodar testes
-        run: npm test
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+
+      - name: Mostrar conteúdo
+        run: |
+          echo "Conteúdo do artefato:"
+          cat dist/build.txt
